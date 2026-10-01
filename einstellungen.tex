@@ -1,0 +1,54 @@
+% Schriftgröße: fontsize in brief.tex
+% zwischen Absätzen eine leere Zeile einfügen, statt lediglich Einrückung: parskip in brief.tex
+% Papierformat auf DIN-A4: paper in brief.tex
+% Die neuste Version von scrlettr2 verwenden: version in brief.tex
+% Zeichenkodierung des Dokuments ist in UTF-8
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+% Eurosymbol-Unterstützung
+\usepackage{eurosym}
+% Das Unicode-Zeichen € als \euro interpretieren.
+% So kann man direkt € tippen anstatt jedes Mal \euro auszuschreiben.
+\DeclareUnicodeCharacter{20AC}{\euro}
+% Sprache des Dokuments auf Deutsch
+\usepackage[ngerman]{babel}
+% Includen von PDFs nach dem Brief, siehe \includepdf unten
+\usepackage{pdfpages}
+% klickbare Links und E-Mail-Adressen. Paket url kann keine klickbaren,
+% deswegen hyperref. Option hidelinks versteckt farbigen Rahmen.
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={},pdftitle={Briefvorlage},pdfsubject={}}
+% Briefkopf (ganz oben) rechts ausrichten, standardmäßig links
+% Telefonnummer im Briefkopf anzeigen
+% Faxnnummer im Briefkopf anzeigen
+% E-Mail-Adresse im Briefkopf anzeigen
+% URL im Briefkopf anzeigen
+% Faltmarkierungen verbergen
+\KOMAoptions{fromalign=right,fromphone=true,fromfax=false,fromemail=true,fromurl=false,foldmarks=false}
+% Absendername unter Schlussformel entfernen. Dieser wird bereits aus dem Briefkopf ersichtlich.
+% Hier wird die signature-Variable einfach auf einen leeren Wert gesetzt und wäre sonst \usekomavar{fromname}.
+\setkomavar{signature}{}
+% Für Schlussformel (und nicht vorhandenen Namen darunter) Linksbündigkeit erzwingen
+%\renewcommand*{\raggedsignature}{\raggedright}
+\renewcommand*{\raggedsignature}{\raggedright}
+
+
+% Enable the signature after adding your own image.
+\newif\ifUnterschriftAnzeigen
+\UnterschriftAnzeigenfalse
+\newcommand{\UnterschriftDatei}{assets/unterschrift.png}
+\newcommand{\UnterschriftBreite}{40mm}
+\newif\ifNameUnterGrussAnzeigen
+\NameUnterGrussAnzeigentrue
+\newcommand{\BriefUnterschrift}{%
+  \ifUnterschriftAnzeigen
+    \IfFileExists{\UnterschriftDatei}{%
+      \par\vspace{10pt}\includegraphics[width=\UnterschriftBreite]{\UnterschriftDatei}%
+    }{%
+      \PackageError{briefvorlage}{Signature image missing}{Add the image or disable the signature.}%
+    }%
+  \fi
+  \ifNameUnterGrussAnzeigen\par\usekomavar{fromname}\fi
+}
